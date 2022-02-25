@@ -1,0 +1,295 @@
+CREATE TABLE STUDENT(Stud_No CHAR(9) PRIMARY KEY,Stud_lname CHAR(30),Stud_fname CHAR(20),Address CHAR(50),City CHAR(30),State CHAR(2),PostalCode CHAR(9));
+
+SQL> DESC STUDENT
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ STUD_NO									   NOT NULL CHAR(9)
+ STUD_LNAME									    CHAR(30)
+ STUD_FNAME									    CHAR(20)
+ ADDRESS									    CHAR(50)
+ CITY										    CHAR(30)
+ STATE										    CHAR(2)
+ POSTALCODE									    CHAR(9)
+
+
+CREATE TABLE INSTRUCTOR(Instructor_id CHAR(5) PRIMARY KEY,Instructor_lname CHAR(30),Instructor_fname CHAR(20),Instructor_phone CHAR(8));
+
+SQL> DESC INSTRUCTOR
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ INSTRUCTOR_ID									   NOT NULL CHAR(5)
+ INSTRUCTOR_LNAME								    CHAR(30)
+ INSTRUCTOR_FNAME								    CHAR(20)
+ INSTRUCTOR_PHONE								    CHAR(8)
+
+
+CREATE TABLE COURSE(Course_Code CHAR(6) PRIMARY KEY,Course_Title CHAR(25),Course_Hours NUMBER(2,0));
+SQL> DESC COURSE
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ COURSE_CODE									   NOT NULL CHAR(6)
+ COURSE_TITLE									    CHAR(25)
+ COURSE_HOURS									    NUMBER(2)
+
+CREATE TABLE SECTION(Section_id CHAR(7) NOT NULL,Time_Offered CHAR(10) NOT NULL,Days_Offered CHAR(10),Section_Room CHAR(8),Class_Size NUMBER(3,0) CHECK (Class_Size>=0),Number_Enrolled NUMBER(3,0) CHECK (Number_Enrolled>=0),Instructor_id CHAR(5) REFERENCES INSTRUCTOR,Course_Code CHAR(6) REFERENCES COURSE,PRIMARY KEY(Section_id,Time_Offered));
+SQL> DESC SECTION
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ SECTION_ID									   NOT NULL CHAR(7)
+ TIME_OFFERED									   NOT NULL CHAR(10)
+ DAYS_OFFERED									    CHAR(10)
+ SECTION_ROOM									    CHAR(8)
+ CLASS_SIZE									    NUMBER(3)
+ NUMBER_ENROLLED								    NUMBER(3)
+ INSTRUCTOR_ID									    CHAR(5)
+ COURSE_CODE									    CHAR(6)
+
+
+CREATE TABLE ENROLLMENT(Stud_No CHAR(9) NOT NULL REFERENCES STUDENT,Section_id CHAR(7) NOT NULL,Grade CHAR(2),Time_Offered CHAR(10),PRIMARY KEY(Stud_No,Section_id),FOREIGN KEY(Section_id,Time_Offered)REFERENCES SECTION);
+SQL> DESC ENROLLMENT
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ STUD_NO									   NOT NULL CHAR(9)
+ SECTION_ID									   NOT NULL CHAR(7)
+ GRADE										    CHAR(2)
+ TIME_OFFERED									    CHAR(10)
+
+Q2)
+SQL> ALTER TABLE ENROLLMENT MODIFY Grade CHAR(4);          
+
+Table altered.
+
+SQL> DESC ENROLLMENT
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ STUD_NO									   NOT NULL CHAR(9)
+ SECTION_ID									   NOT NULL CHAR(7)
+ GRADE										    CHAR(4)
+ TIME_OFFERED									    CHAR(10)
+
+
+Q3)
+SQL> ALTER TABLE INSTRUCTOR ADD Instructor_mailid CHAR(15);
+
+Table altered.
+
+SQL> DESC INSTRUCTOR
+ Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ INSTRUCTOR_ID									   NOT NULL CHAR(5)
+ INSTRUCTOR_LNAME								    CHAR(30)
+ INSTRUCTOR_FNAME								    CHAR(20)
+ INSTRUCTOR_PHONE								    CHAR(8)
+ INSTRUCTOR_MAILID								    CHAR(15)
+ 
+ Q4)
+ SQL> Create view instructor_sections_view as
+select I.instructor_fname,I.instructor_lname,S.time_offered as section_time,S.days_offered as section_days,S.section_room,C.course_code,C.course_title
+from INSTRUCTOR I,SECTION S,COURSE C;  2    3  
+
+View created.
+
+SQL> desc instructor_sections_view
+ Name														   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ INSTRUCTOR_FNAME													    CHAR(20)
+ INSTRUCTOR_LNAME													    CHAR(30)
+ SECTION_TIME													   NOT NULL CHAR(10)
+ SECTION_DAYS														    CHAR(10)
+ SECTION_ROOM														    CHAR(8)
+ COURSE_CODE													   NOT NULL CHAR(6)
+ COURSE_TITLE														    CHAR(25)
+
+ 
+Q5)
+INSERT INTO STUDENT VALUES('111111111','PRADEEP','CHAITRA','KATTUPARAMBIL HOUSE,PUTHENCHIRA','KERALA','KL','12333380');
+
+1 row created.
+
+STUD_NO   STUD_LNAME			 STUD_FNAME	      ADDRESS		 CITY				ST POSTALCOD
+--------- ------------------------------ -------------------- -------------------------------------------------- ------------------------------ -- ---------
+302102011 NATH				 ATHIRA 	      102 SKY LINE APT,BLOCK B,MOOKANOOR,ANGAMALY	 ERNAKULAM			KL 234567890
+311201921 BIJU				 DANIEL 	      THIRUVALLA	 PATTANAMTHITTA 		KL 28812399
+202012345 GEORGE			 FRANK		      VEENU HOUSE,SHORNUR RD,HYDERABAD			 PINK CITY			KA 100000333
+41234000  DENNIS			 ELIZABETH	      PARAMBUVEETIL HOUSE,FLOWER RD,CHENNAI		 CHENNAI			TN 12345678
+544412330 HOMES 			 SHERLOCK	      RAMNATH HOUSE,ST PETER RD,SHANA ST		 DELHI				DL 12311118
+111111111 PRADEEP			 CHAITRA	      KATTUPARAMBIL HOUSE,PUTHENCHIRA			 KERALA 			KL 12333380
+
+
+Q6)
+INSERT INTO COURSE VALUES('CSI240','WEB DESIGN','4');
+
+1 row created.
+
+COURSE COURSE_TITLE		 COURSE_HOURS
+------ ------------------------- ------------
+EI2811 DIGITAL SIGNALS			   15
+EC1213 INTRODUCTION TO ELECTRIC 	   23
+ME1780 FLUID MECHANICS			   20
+CSI240 WEB DESIGN			    4
+
+Q7)
+INSERT INTO SECTION VALUES('3011255','2-4','MW','BLGNG102',35,0,'11113','CSI240');
+
+1 row created.
+
+SECTION TIME_OFFER DAYS_OFFER SECTION_ CLASS_SIZE NUMBER_ENROLLED INSTR COURSE
+------- ---------- ---------- -------- ---------- --------------- ----- ------
+3011255 2-4	   MW	      BLGNG102	       35		0 11113 CSI240
+
+Q8)
+
+ ___INSERT INTO ENROLLMENT VALUES('111111111','3011255',NULL,'2-4');
+
+1 row created.
+
+STUD_NO   SECTION GR TIME_OFFER
+--------- ------- -- ----------
+111111111 3011255    2-4
+
+Q9)
+
+UPDATE SECTION SET CLASS_SIZE=CLASS_SIZE*1.1;
+
+Name										   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ SECTION_ID									   NOT NULL CHAR(7)
+ TIME_OFFERED									   NOT NULL CHAR(10)
+ DAYS_OFFERED									    CHAR(10)
+ SECTION_ROOM									    CHAR(8)
+ CLASS_SIZE									    NUMBER(3)
+ NUMBER_ENROLLED								    NUMBER(3)
+ INSTRUCTOR_ID									    CHAR(5)
+ COURSE_CODE									    CHAR(6)
+
+Q10)
+UPDATE SECTION SET TIME_OFFERED='2-4',DAYS_OFFERED='MW' WHERE SECTION_ID='3011236';
+
+1 row updated.
+
+SECTION TIME_OFFER DAYS_OFFER SECTION_ CLASS_SIZE NUMBER_ENROLLED INSTR COURSE
+------- ---------- ---------- -------- ---------- --------------- ----- ------
+3011255 2-4	   MW	      BLGNG102	       39		0 11113 CSI240
+3011236 2-4	   MW	      BLGNG100	       20		0 11113 CSI240
+
+Q11)
+SQL> DELETE SECTION WHERE SECTION_ID='2011235';
+DELETE SECTION WHERE SECTION_ID='2011235'
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (CS32219.SYS_C0014667) violated - child record found
+
+Q12)
+SQL> INSERT INTO COURSE VALUES('CSI360','DATA STRUCTURES','10');
+
+1 row created.
+
+SQL> DELETE COURSE WHERE COURSE_CODE='CSI360';
+
+1 row deleted.
+
+Q13)
+SQL> SELECT SECTION_ID,TIME_OFFERED,DAYS_OFFERED,COURSE_CODE FROM SECTION WHERE DAYS_OFFERED LIKE ('M%') AND CLASS_SIZE BETWEEN 40 AND 50;
+
+SECTION TIME_OFFER DAYS_OFFER COURSE
+------- ---------- ---------- ------
+123456	4-5	   MTWF       EC1213
+
+
+
+Q14)
+ INSERT INTO COURSE VALUES('CSI100','DATA STRUCTURES','4');
+
+1 row created.
+
+Commit complete.
+SQL> INSERT INTO COURSE VALUES('CSI510','FLAT','4');
+
+1 row created.
+
+Commit complete.
+SQL> INSERT INTO COURSE VALUES('CSI311','MOSS','4');
+
+1 row created.
+
+Commit complete.
+SQL> INSERT INTO COURSE VALUES('CSI101','COMPUTER NETWORKS','4');
+
+1 row created.
+
+Commit complete.
+
+SQL> SELECT * FROM COURSE WHERE COURSE_HOURS='4' ORDER BY COURSE_CODE;
+
+COURSE COURSE_TITLE		 COURSE_HOURS
+------ ------------------------- ------------
+CSI100 DATA STRUCTURES			    4
+CSI101 COMPUTER NETWORKS		    4
+CSI240 WEB DESIGN			    4
+CSI311 MOSS				    4
+CSI510 FLAT				    4
+
+Q15)
+SELECT INSTRUCTOR_ID,SUM(CLASS_SIZE) FROM SECTION GROUP BY INSTRUCTOR_ID ORDER BY SUM(CLASS_SIZE);
+
+INSTR SUM(CLASS_SIZE)
+----- ---------------
+32219		   35
+12345		   45
+11113		   59
+
+
+Q16)
+SQL> SELECT STUD_NO,SECTION_ID,GRADE FROM ENROLLMENT WHERE GRADE IN('B','B+','B-');
+
+STUD_NO   SECTION GR
+--------- ------- --
+302102011 9887321 B+
+311201921 9887321 B-
+544412330 9887321 B
+
+Q17)
+SQL> SELECT COURSE_CODE,AVG(CLASS_SIZE) FROM SECTION GROUP BY COURSE_CODE;
+
+COURSE AVG(CLASS_SIZE)
+------ ---------------
+CSI240		  29.5
+EI2811		    25
+EC1213		    45
+ME1780		    10
+
+
+Q18)
+INSTRUCTOR_FNAME     INSTRUCTOR_LNAME		    TIME_OFFER DAYS_OFFER SECTION_ COURSE COURSE_TITLE
+-------------------- ------------------------------ ---------- ---------- -------- ------ -------------------------
+ENOLA		     HOLMES			    3-6        MTWF	  BLGNG211 ME1780 FLUID MECHANICS
+ENOLA		     HOLMES			    3-4        MTWF	  ABCDE344 EI2811 DIGITAL SIGNALS
+PETER		     PAN			    2-4        MW	  BLGNG102 CSI240 WEB DESIGN
+PETER		     PAN			    2-4        MW	  BLGNG100 CSI240 WEB DESIGN
+AISWARYA	     BABU			    4-5        MTWF	  SASS344  EC1213 INTRODUCTION TO ELECTRIC
+
+
+Q19)
+SQL>  SELECT STUD_FNAME,STUD_LNAME,E.SECTION_ID,E.GRADE FROM STUDENT S,ENROLLMENT E WHERE S.STUD_NO=E.STUD_NO;
+
+STUD_FNAME	     STUD_LNAME 		    SECTION GR
+-------------------- ------------------------------ ------- --
+ATHIRA		     NATH			    9887321 B+
+DANIEL		     BIJU			    2011235 C
+DANIEL		     BIJU			    9887321 B-
+FRANK		     GEORGE			    9887321 A+
+ELIZABETH	     DENNIS			    3011236 A+
+ELIZABETH	     DENNIS			    3011255 A
+SHERLOCK	     HOMES			    9887321 B
+CHAITRA 	     PRADEEP			    3011255
+
+
+
+
+
+
+
+
+___________________________________________________________________________________________________
+ 
+ 

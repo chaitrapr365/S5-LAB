@@ -1,0 +1,9 @@
+DECLARE  
+    l number:=5; 
+    fact number:=1; 
+BEGIN 
+    FOR a IN 1 .. l LOOP 
+        fact:=fact*a; 
+    END LOOP; 
+    dbms_output.put_line('Factorial of '||l||' is = '||fact); 
+END;

@@ -1,0 +1,15 @@
+DECLARE  
+    n number:= 5; 
+    first number:= 0; 
+    second number:= 1; 
+    next number; 
+BEGIN 
+    dbms_output.put_line(first); 
+    dbms_output.put_line(second); 
+    for i in 1 .. n LOOP 
+        next:=first+second; 
+        dbms_output.put_line(next); 
+        first:=second; 
+        second:=next; 
+    END LOOP; 
+END; 

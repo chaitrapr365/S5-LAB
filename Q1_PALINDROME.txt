@@ -1,0 +1,15 @@
+DECLARE  
+    str varchar2(20):='mom'; 
+    rev varchar2(20):=NULL; 
+    l number:=NULL; 
+BEGIN 
+    l:=LENGTH(str); 
+    FOR a IN REVERSE 1 .. l LOOP 
+        rev:=rev||Substr(str,a,1); 
+    END LOOP; 
+    IF str=rev THEN 
+        dbms_output.put_line(str ||' is a palindrome'); 
+    ELSE 
+        dbms_output.put_line(str ||' is not a palindrome'); 
+    END IF; 
+END;

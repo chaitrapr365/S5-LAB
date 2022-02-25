@@ -1,0 +1,38 @@
+create table ITEMS(SUP_CODE varchar(2) ,ITEM_CODE varchar(10),ITEM_QTY number(3) ,ITEM_RATE number(6),ITEM_TAX number(3));
+insert into ITEMS values('s1','item1','10','1000','15');
+insert into ITEMS values('s2','item2',10,'2000','10');
+insert into ITEMS values('s3','item3',5,3000,10);
+insert into ITEMS values('s4','item4',2,5000,10);
+
+DECLARE  
+    total float;
+    discount float;
+    p number; 
+    q number; 
+    r number; 
+BEGIN 
+    --select * from ITEMS; 
+    SELECT ITEM_RATE,ITEM_TAX,ITEM_QTY 
+    INTO p,r,q 
+    FROM ITEMS  
+    where SUP_CODE='s1'; 
+    total:=(p+r)*q; 
+    dbms_output.put_line('Total of s1 is '||total); 
+    if (total BETWEEN 1000. and 5000) THEN
+        discount:=5;
+    elsif (total BETWEEN 5001 and 10000) THEN
+        discount:=5.5;
+    elsif (total BETWEEN 10001 and 50000) THEN
+        discount:=6;
+    elsif (total BETWEEN 50000 and 100000) THEN
+        discount:=7;
+    elsif (total>=100001) THEN
+        discount:=8;
+    else 
+        dbms_output.put_line('The Total price is not eligable for discount!');
+        discount:=0;
+    END IF;
+    dbms_output.put_line('The discount rate is '||discount||'%');
+    total:=total-(total*(discount/100));
+    dbms_output.put_line('TOTAL='||total);
+END; 

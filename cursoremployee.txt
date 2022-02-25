@@ -1,0 +1,29 @@
+SET SERVEROUTPUT on;
+DECLARE
+	c_id employee.eno%type;
+	c_name employee.ename%type;
+	c_doj employee.doj%type;
+	c_salary employee.salary%type;
+	CURSOR c_emp is
+		SELECT ENO,ENAME,DOJ,SALARY FROM EMPLOYEE;
+BEGIN
+	OPEN c_emp;
+	LOOP 
+		FETCH c_emp into c_id,c_name,c_doj,c_salary;
+		
+		IF (((sysdate-c_doj)/365)>5) THEN
+			dbms_output.put_line(c_id||' '||c_name||' '||c_doj||' '||c_salary||' GREATER');
+			UPDATE EMPLOYEE 
+			SET salary=c_salary+((c_salary/100)*10)
+			where eno=c_id;
+			
+		ELSE
+			dbms_output.put_line(c_id||' '||c_name||' '||c_doj||' '||c_salary||' LESSER');
+			UPDATE EMPLOYEE 
+			SET salary=c_salary+500
+			where eno=c_id;
+		END IF;
+		EXIT WHEN c_emp%notfound;
+	END LOOP;
+	CLOSE c_emp;
+END;

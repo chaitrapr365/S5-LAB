@@ -1,0 +1,19 @@
+create table student(rn number not null ,name varchar(20) not null ,grade varchar(2) not null);
+insert into student values(1,'Aleena Baby','A+')
+insert into student values(23,'Jack Frost','B-')
+insert into student values(36,'Aneeka Geo','A')
+insert into student values(48,'Haseen Fairuz','A+')
+insert into student values(55,'Harry Styles','B+')
+
+DECLARE 
+    r number;  
+    g varchar(2);  
+BEGIN  
+    SELECT RN,GRADE 
+    INTO r,g 
+    FROM student 
+    where RN='23'; --enter desired rollnumber 
+    dbms_output.put_line('--ENTERING PROCEDURE--'); 
+    display(r,g);  
+    dbms_output.put_line('--ENd OF PROCEDURE--'); 
+END; 

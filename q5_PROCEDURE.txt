@@ -1,0 +1,7 @@
+CREATE OR REPLACE PROCEDURE DISPLAY(rn IN number ,grade IN varchar2) 
+IS  
+BEGIN 
+dbms_output.put_line('ROLL NUMBER:'||rn); 
+dbms_output.put_line('THE GRADE OF STUDENT='||grade); 
+END DISPLAY;
+

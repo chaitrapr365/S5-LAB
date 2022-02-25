@@ -1,0 +1,13 @@
+
+sqlplus CS32219/715106@172.16.1.11/csdb
+SET AUTOCOMMIT ON
+SET LINESIZE 200
+
+
+//to import bulk 
+wget 172.16.22.22/datan.zip
+
+
+sqlplus CS32219/715106@172.16.1.11/csdb
+
+SELECT EXTRACT(YEAR FROM DOJ) - EXTRACT(YEAR FROM date2) FROM mytable
